@@ -18,7 +18,7 @@ The data to process is a sequence of labelled 3D coordinates on pedestrians, and
 
 ___
 
-## **The Data**
+## **Data**
 
 ### ***Analysis***
 
