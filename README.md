@@ -5,7 +5,9 @@ ___
 ___
 
 - [Introduction](#introduction)
-- [The Data](#the-data)
+- [The Dataset](#the-dataset)
+
+___
 
 ## **Introduction**
 
@@ -18,11 +20,18 @@ The data to process is a sequence of labelled 3D coordinates on pedestrians, and
 
 ___
 
-## **Data**
+## **The Dataset**
 
-### ***Analysis***
+The dataset used is the **NTU RGB+D - Action Recognition Dataset** described in [this repository](https://github.com/shahroudy/NTURGB-D).
+When cloning the current respository please download the following [zip file](https://drive.google.com/u/0/uc?export=download&confirm=7nHU&id=1CUZnBtYwifVXS21yVg62T-vrPVayso5H) (5.8 Go) and extract it (13.4 Go) in the data folder. This compressed folder contains the relevant data for our project.
 
-### ***Visualization***
+### ***Data Analysis***
+
+*TODO*
+
+### ***Data Visualization***
+
+*TODO*
 
 ___
 
@@ -35,6 +44,12 @@ ___
 ___
 
 ## **Conclusion**
+
+___
+
+### **References**
+
+- [**NTU RGB+D - Action Recognition Dataset**](https://github.com/shahroudy/NTURGB-D)
 
 ___
 ___
