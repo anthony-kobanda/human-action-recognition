@@ -6,8 +6,9 @@ ___
 
 - [**Introduction**](#introduction)
 - [**The Dataset**](#the-dataset)
-    - [***Presentation***](#presentation)
-    - [***Structure***](#structure)
+    - [*Presentation*](#presentation)
+    - [*Structure*](#structure)
+    - [*Action Classes*](#action-classes)
 - [**Analysis and Visualization of the Dataset**](#analysis-and-visualization-of-the-dataset)
 - [**Models**](#models)
 - [**Resuts**](#results)
