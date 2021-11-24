@@ -50,6 +50,3 @@ ___
 ### **References**
 
 - [**NTU RGB+D - Action Recognition Dataset**](https://github.com/shahroudy/NTURGB-D)
-
-___
-___
