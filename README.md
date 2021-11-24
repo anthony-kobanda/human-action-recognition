@@ -42,7 +42,12 @@ The *NTU RGB+D skeletons dataset* contains 56,880 skeletal data samples (3D loca
 
 302 samples have missing or incomplete skeleton data. The list of these are provided [here](./data/missing_skeletons.txt).
 
-Each file in the dataset is in the format of SsssCcccPpppRrrrAaaa (e.g., S001C002P003R002A013), in which sss is the setup number (between 0001 and 017), ccc is the camera ID, ppp is the performer (or subject) ID, rrr is the replication number (1 or 2), and aaa is the action class label.
+Each file in the dataset is in the format of SsssCcccPpppRrrrAaaa (e.g., S001C002P003R002A013), in which:
+- sss is the setup number (between 001 and 017);
+- ccc is the camera ID;
+- ppp is the performer (or subject) ID;
+- rrr is the replication number (1 or 2);
+- aaa is the action class label (between 001 and 060).
 
 To know more about the setups, the camera IDs, and more details, please refer to the [NTU RGB+D dataset paper](http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Shahroudy_NTU_RGBD_A_CVPR_2016_paper.pdf).
 
