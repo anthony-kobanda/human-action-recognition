@@ -45,7 +45,7 @@ A44. touch head (headache)
 A45. touch chest (stomachache/heart pain)
 A46. touch back (backache)
 A47. touch neck (neckache)
-A48. nausea or vomiting condition.
+A48. nausea or vomiting condition
 A49. use a fan (with hand or paper)/feeling warm
 A50. punching/slapping other person
 A51. kicking other person
