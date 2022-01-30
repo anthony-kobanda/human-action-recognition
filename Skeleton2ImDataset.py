@@ -127,7 +127,10 @@ for i in tqdm(range(nb_files)):
     if filtered_set[i].replace(".skeleton", ".npy") not in cleaned_set:
         skeleton = get_skeleton_info("nturgbd_skeletons_s001_to_s017/"+filtered_set[i])
 #         sklt_pixels = get_pixels(skeleton)
-        sklt_pixels = normalize_z(skeleton)
-        with open("nturgbd_pixel+depth/" + filtered_set[i].replace(".skeleton", ".npy"), 'wb') as cleaned_file:
-            np.save(cleaned_file, sklt_pixels)
-            cleaned_file.close()
+        try:
+            sklt_pixels = normalize_z(skeleton)
+            with open("nturgbd_pixel+depth/" + filtered_set[i].replace(".skeleton", ".npy"), 'wb') as cleaned_file:
+                np.save(cleaned_file, sklt_pixels)
+                cleaned_file.close()
+        except:
+            continue
