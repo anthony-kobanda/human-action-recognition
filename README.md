@@ -73,30 +73,30 @@ The content of a given file in the *NTU RGB+D skeletons dataset* is described he
 
         * Coordinates from the camera (as the center of the space *i.e.* origin = $(0,0,0)$) in meters:
         
-            1. cameraX
-            2. cameraY
-            3. cameraZ
+            * cameraX
+            * cameraY
+            * cameraZ
         
         * Coordinates on the color image (with a resolution of $1920 \times 1080$) in pixels:
             
-            4. colorX
-            5. colorY
+            * colorX
+            * colorY
         
         * Coordinates on the depth image (with a of $512 \times 424$) in pixels:
         
-            6. depthX  
-            7. depthY
+            * depthX  
+            * depthY
 
         * Orientation coordinates of the joint orientation:
             
-            8. orientationW
-            9. orientationX
-            10. orientationY
-            11. orientationZ
+            * orientationW
+            * orientationX
+            * orientationY
+            * orientationZ
 
         * State of the joint:
 
-            12. trackingState (which is always equal to 2)
+            * trackingState (which is always equal to 2)
     
 
 ### **Structure of a skeleton**
