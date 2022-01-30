@@ -7,9 +7,9 @@ ___
 - [**Introduction**](#introduction)
 - [**The Dataset**](#the-dataset)
     - [*Presentation*](#presentation)
-    - [*Structure*](#structure)
-    - [*Content*](#content)
-    - [*Skeletons*](#skeletons)
+    - [*Structure of the dataset*](#structure-of-the-dataset)
+    - [*Content of the files*](#content-of-the-files)
+    - [*Structure of a skeleton*](#structure-of-a-skeleton)
     - [*Action Classes*](#action-classes)
 - [**Analysis and Visualization of the Dataset**](#analysis-and-visualization-of-the-dataset)
 - [**Models**](#models)
@@ -38,7 +38,7 @@ The dataset used is the ***NTU RGB+D - Action Recognition Dataset*** (***Skeleto
 
 When cloning the current respository please also download the following [zip file](https://drive.google.com/file/d/1U1veKcEC2B5Xn_o3StN3U8qNFHRhxqLu/view?usp=sharing) (5.8 Go zipped and 13,4 Go unzipped), and extract it in the folder named *data* at the root of the repository. This compressed folder contains the relevant data for our project. Once it is done, run ```data_cleaning.py``` to format the data correctly.
 
-### ***Structure***
+### ***Structure of the dataset***
 
 The *NTU RGB+D skeletons dataset* contains 56,880 skeletal data samples (3D locations of 25 major body joints at each frame).
 
@@ -53,7 +53,7 @@ Each file in the dataset is in the format of SsssCcccPpppRrrrAaaa (e.g., S001C00
 
 To know more about the camera IDs and more details about the setup, please refer to the [NTU RGB+D dataset paper](http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Shahroudy_NTU_RGBD_A_CVPR_2016_paper.pdf).
 
-### **Content**
+### **Content of the files**
 
 The content of a given file in the *NTU RGB+D skeletons dataset* is described here.
 
@@ -99,7 +99,7 @@ The content of a given file in the *NTU RGB+D skeletons dataset* is described he
             12. trackingState (which is always equal to 2)
     
 
-### **Joints of the skeleton**
+### **Structure of a skeleton**
 
 Here are the 25 joints considered in the representation of a skeleton:
 
