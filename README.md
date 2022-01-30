@@ -133,6 +133,7 @@ Here are the 25 joints considered in the representation of a skeleton:
 | 24. (*Right*) Hand Tip    |
 | 25. (Right*) Thumb        |
 |                           |
+
 ### **Action Classes**
 
 The dataset contains 60 action classes listed below:
