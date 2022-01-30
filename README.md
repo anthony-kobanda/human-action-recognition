@@ -131,7 +131,7 @@ Here are the 25 joints considered in the representation of a skeleton:
 | 22. (*Left*) Hand Tip     |
 | 23. (*Left*) Thumb        |
 | 24. (*Right*) Hand Tip    |
-| 25. (Right*) Thumb        |
+| 25. (*Right*) Thumb        |
 |                           |
 
 ### **Action Classes**
