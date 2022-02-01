@@ -217,11 +217,11 @@ Here are a few remarks from those different values:
 
 In this part we will see, for each action class, how the space is used (3D dataset) and where on the screen the action are most likely to be located (2D dataset).
 
-![occupation of space in images](./assets/occupation_of_space2D.png)
+![occupation of space in images](./assets/occupation_of_space2D_back.png)
 
 We can see from this heatmap that the actions take place in the centre of the images.
 
-![occupation of space](./assets/occupation_of_space3D.png)
+![occupation of space](./assets/occupation_of_space3D_back.png)
 
 From this histogram we can see that the position distribution is somewhat alike among the different action class. However, once again, the actions are centered around 0 for the X and Y coordinates, and located around  a certain depth band for the Z coordinate.
 
