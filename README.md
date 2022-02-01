@@ -247,7 +247,7 @@ ___
 
 ## **Models**
 
-To perform the task aforementioned we decided to implement LSTM (*Long Short Term Memory*) networks ([here](./models_implemented/lstm.ipynb)). Indeed, given the sequential aspect of our data it seems relevant to consider models that would take into account such specificity.
+To perform the task aforementioned we decided to implement LSTM (*Long Short Term Memory*) networks ([here](./model.ipynb)). Indeed, given the sequential aspect of our data it seems relevant to consider models that would take into account such specificity.
 
 ___
 
