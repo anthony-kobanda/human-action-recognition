@@ -233,15 +233,15 @@ Animation of a skeleton for the Action Class 7 (throw):
 
 Animation of a skeleton for the Action Class 8 (sitting down):
 
-<img src="./assets/sample_2_A8.gif" alt height="540"/>
+<img src="./assets/sample_2_A7.gif" alt height="540"/>
 
 Animation of a skeleton for the Action Class 9 (standing up):
 
-<img src="./assets/sample_2_A8.gif" alt height="540"/>
+<img src="./assets/sample_3_A8.gif" alt height="540"/>
 
 Animation of a skeleton for the Action Class 33 (check time):
 
-<img src="./assets/sample_2_A8.gif" alt height="540"/>
+<img src="./assets/sample_7_A32.gif" alt height="540"/>
 
 ___
 
