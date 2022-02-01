@@ -5,81 +5,87 @@ import os
 
 
 
-# data directory path (needed to be able to launch the script from anywhere)
+"""
+The following python script transform the .skeleton files
+into arrays saved in .npy files.txt in two different datasets.txt.
+
+In the first dataset, we consider the sequence (frame by frame) of
+the 25 joints in a 2D images (with a resolution of 1920 x 1080)
+plus the estimated depth in meter.
+The resulting arrays have a dimension equals to
+nb_frames x nb_joints x nb_image_dim = nb_frames x 25 x 2.
+
+In the second dataset, we consider the sequence of the 25 joints in
+unormalized 3D images. The resulting arrays have a dimention equals
+to nb_frames x nb_joints x 3.
+"""
+
+
+
+# data directory absolute path (needed to be able to launch the script from anywhere)
 root_dir = os.path.dirname(os.path.realpath(__file__))
 data_dir = root_dir + "/data/"
 
-
-# all the skeletons file names
-complete_set = set(os.listdir(data_dir + "nturgbd_skeletons_s001_to_s017/"))
+# all the raw skeletons file names
+raw_files_set = set(os.listdir(data_dir + "nturgbd60_skeletons/"))
 
 
 # some files have missing skeletons or lead to issues
 with open(data_dir + "missing_skeletons.txt", 'r') as missing_skeletons_file:
-    missing_set = set([file_name.replace('\n','') + ".skeleton" for file_name in missing_skeletons_file.readlines()])
+    missing_files_set = set([file_name.replace('\n','') + ".skeleton" for file_name in missing_skeletons_file.readlines()])
     missing_skeletons_file.close()
-with open(data_dir + "issue_skeletons.txt", 'r') as issue_skeletons_file:
-    issue_set = set([file_name.replace('\n','') + ".skeleton" for file_name in issue_skeletons_file.readlines()])
-    issue_skeletons_file.close()
 
 
 # we discard the previous files from the complete set of files 
-filtered_set = complete_set - missing_set - issue_set
-nb_files = len(filtered_set)
+raw_files_set = raw_files_set - missing_files_set
+
 
 # it is more convenient to manipulate lists for what follows
-complete_set = list(complete_set)
-missing_set = list(missing_set)
-issue_set = list(issue_set)
-filtered_set = list(filtered_set)
+raw_files_set = list(raw_files_set)
+missing_files_set = list(missing_files_set)
+nb_files = len(raw_files_set)
 
 
-# creation of the final folder for the data
-if "nturgbd_skeletons_cleaned" not in os.listdir(data_dir):
-    os.mkdir(data_dir + "nturgbd_skeletons_cleaned/")
-cleaned_set = os.listdir(data_dir + "nturgbd_skeletons_cleaned/")
+# creation of the final folders for the data
+if "nturgbd60_skeletons_2D" not in os.listdir(data_dir):
+    os.mkdir(data_dir + "nturgbd60_skeletons_2D/")
+final2D_set = os.listdir(data_dir + "nturgbd60_skeletons_2D/")
+if "nturgbd60_skeletons_3D" not in os.listdir(data_dir):
+    os.mkdir(data_dir + "nturgbd60_skeletons_3D/")
+final3D_set = os.listdir(data_dir + "nturgbd60_skeletons_3D/")
 
 
 # we now process to the cleaning of the files in the filtered set
 for i in tqdm(range(nb_files)):
 
-    if filtered_set[i].replace(".skeleton", ".npy") not in cleaned_set:
+    if raw_files_set[i].replace(".skeleton", ".npy") not in final3D_set:
 
-        with open(data_dir + "nturgbd_skeletons_s001_to_s017/" + filtered_set[i], 'r') as raw_file:
+        with open(data_dir + "nturgbd60_skeletons/" + raw_files_set[i], 'r') as raw_file:
             file_lines = raw_file.readlines()
             nb_frames = int(file_lines[0][:-1])
             raw_file.close()
         
-        if nb_frames == (len(file_lines)-1)/28:
-            
-            try:
-
-                # we only keep the spatial coordinate for each of the 25 joints at each frame 
-                cleaned_file_data = np.array([[file_lines[j].split(' ')[:3] for j in range(4+28*i,1+28*(i+1))] for i in range(nb_frames)], dtype=float)
-
-                # we save the data as a numpy array of shape: (nb_frames, nb_joints, nb_spatial_coordinates) = (nb_frames, 25, 3) 
-                with open(data_dir + "nturgbd_skeletons_cleaned/" + filtered_set[i].replace(".skeleton", ".npy"), 'wb') as cleaned_file:
-                    np.save(cleaned_file, cleaned_file_data)
-                    cleaned_file.close()
-            
-            # the file leads to an issue so we add its name in the corresponding file
-            except:
-
-                if filtered_set[i].replace(".skeleton", "") not in issue_set:
-                    with open(data_dir + "issue_skeletons.txt", 'a') as issue_skeletons_file:
-                        line_content = filtered_set[i].replace(".skeleton", "")
-                        if i>0:
-                            line_content = '\n' + line_content
-                        issue_skeletons_file.write(line_content)
-                        issue_skeletons_file.close()
+        array2D = - 100 * np.ones((nb_frames,25,3))
+        array3D = - 100 * np.ones((nb_frames,25,3))
         
-        # the file leads to an issue (nb_frames doesn't match the number of lines) so we add its name in the corresponding file
-        else:
-
-            if filtered_set[i].replace(".skeleton", "") not in issue_set:
-                with open(data_dir + "issue_skeletons.txt", 'a') as issue_skeletons_file:
-                    line_content = filtered_set[i].replace(".skeleton", "")
-                    if i>0:
-                        line_content = '\n' + line_content
-                    issue_skeletons_file.write(line_content)
-                    issue_skeletons_file.close()
+        j = 1
+        frame_count = 0
+        
+        while j < len(file_lines):
+        
+            nb_skeletons = int(file_lines[j][:-1])
+            if nb_skeletons > 0:
+                for k in range(25):
+                    values = file_lines[j+k+3].split(" ")
+                    array2D[frame_count][k] = [float(values[5]), float(values[6]), float(values[2])]
+                    array3D[frame_count][k] = [float(values[0]), float(values[1]), float(values[2])]
+            j += 27 * nb_skeletons + 1
+            frame_count += 1
+        
+        with open(data_dir + "nturgbd60_skeletons_2D/" + raw_files_set[i].replace(".skeleton", ".npy"), 'wb') as array2D_file:
+                    np.save(array2D_file, array2D)
+                    array2D_file.close()
+        
+        with open(data_dir + "nturgbd60_skeletons_3D/" + raw_files_set[i].replace(".skeleton", ".npy"), 'wb') as array3D_file:
+                    np.save(array3D_file, array3D)
+                    array3D_file.close()
