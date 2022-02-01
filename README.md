@@ -249,6 +249,15 @@ ___
 
 To perform the task aforementioned we decided to implement LSTM (*Long Short Term Memory*) networks ([here](./model.ipynb)). Indeed, given the sequential aspect of our data it seems relevant to consider models that would take into account such specificity.
 
+Here are the loss and accuracies of the three models considered:
+
+![loss and acc (basic)](./models_saved/LSTM03D_loss_acc.png)
+![loss and acc (masked)](./models_saved/LSTM03Dmasked_loss_acc.png)
+![loss and acc (part)](./models_saved/LSTM03Dpart_loss_acc.png)
+
+Now let's see how the models perform depending on the percentage of the sequence given as input:
+
+![accuracy per percentage](./assets/accuracy_per_percentage.png)
 ___
 
 ## **Results**
