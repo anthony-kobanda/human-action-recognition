@@ -1,4 +1,5 @@
 # **Human Action Recognition in Videos using Pedestrian Keypoints**
+
 *Case study in Artificial Intelligence and Visual Computing as part of a [group school project](https://moodle.polytechnique.fr/course/view.php?id=13078) with [IDEMIA](https://www.idemia.com/)*.
 
 ___
@@ -13,6 +14,7 @@ ___
 - [**Analysis and Visualization of the Dataset**](#analysis-and-visualization-of-the-dataset)
 - [**Models**](#models)
 - [**Resuts**](#results)
+- [**OpenPose**]()
 - [**Conclusion**](#conclusion)
 - [**References**](#references)
 
