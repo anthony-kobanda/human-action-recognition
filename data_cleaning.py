@@ -6,11 +6,11 @@ import os
 
 
 """
-The following python script transform the .skeleton files
-into arrays saved in .npy files.txt in two different datasets.txt.
+The following python script transform the .skeleton files into
+arrays saved in .npy files.txt in two different datasets.txt.
 
-In the first dataset, we consider the sequence (frame by frame) of
-the 25 joints in a 2D images (with a resolution of 1920 x 1080)
+In the first dataset, we consider the sequence (frame by frame)
+of the 25 joints in a 2D images (with a resolution of 1920 x 1080)
 plus the estimated depth in meter.
 The resulting arrays have a dimension equals to
 nb_frames x nb_joints x nb_image_dim = nb_frames x 25 x 2.
@@ -30,7 +30,7 @@ data_dir = root_dir + "/data/"
 raw_files_set = set(os.listdir(data_dir + "nturgbd60_skeletons/"))
 
 
-# some files have missing skeletons or lead to issues
+# some files have missing skeletons
 with open(data_dir + "missing_skeletons.txt", 'r') as missing_skeletons_file:
     missing_files_set = set([file_name.replace('\n','') + ".skeleton" for file_name in missing_skeletons_file.readlines()])
     missing_skeletons_file.close()
@@ -55,7 +55,7 @@ if "nturgbd60_skeletons_3D" not in os.listdir(data_dir):
 final3D_set = os.listdir(data_dir + "nturgbd60_skeletons_3D/")
 
 
-# we now process to the cleaning of the files in the filtered set
+# we now process to the cleaning/transformation of the files in the filtered set
 for i in tqdm(range(nb_files)):
 
     if raw_files_set[i].replace(".skeleton", ".npy") not in final3D_set:
@@ -65,8 +65,8 @@ for i in tqdm(range(nb_files)):
             nb_frames = int(file_lines[0][:-1])
             raw_file.close()
         
-        array2D = - 100 * np.ones((nb_frames,25,3))
-        array3D = - 100 * np.ones((nb_frames,25,3))
+        array2D = - np.zeros((nb_frames,25,2))
+        array3D = - np.zeros((nb_frames,25,3))
         
         j = 1
         frame_count = 0
@@ -77,7 +77,7 @@ for i in tqdm(range(nb_files)):
             if nb_skeletons > 0:
                 for k in range(25):
                     values = file_lines[j+k+3].split(" ")
-                    array2D[frame_count][k] = [float(values[5]), float(values[6]), float(values[2])]
+                    array2D[frame_count][k] = [float(values[5]), float(values[6])]
                     array3D[frame_count][k] = [float(values[0]), float(values[1]), float(values[2])]
             j += 27 * nb_skeletons + 1
             frame_count += 1
