@@ -86,6 +86,7 @@ class HumanActionDataset3D(Dataset):
     def __getitem__(self, idx):
         tensor = torch.Tensor(np.load(self.data_dir + self.data_files[idx]))
         if self.with_depth:
+            tensor[:,:,2] = 3
             tensor = tensor.reshape((tensor.shape[0], 75))
         else:
             tensor = torch.tensor([[tensor[i,k//2,k%2] for k in range(50)] for i in range(tensor.shape[0])])
@@ -136,7 +137,7 @@ class LSTM03D(nn.Module):
 
 model_LSTM3DF = LSTM03D(nb_classes=len(classes), input_size=75, hidden_size_lstm=256, hidden_size_classifier=128, num_layers=1, device=device)
 model_LSTM3DF.to(device)
-model_LSTM3DF.load_state_dict(torch.load("./models_saved/LSTM3DF.pt"))
+model_LSTM3DF.load_state_dict(torch.load("./models_saved/LSTM3DF_0.pt"))
 model_LSTM3DF.eval()
 
 
@@ -148,6 +149,8 @@ model_LSTM3DF.eval()
 print("tracking ...")
 
 # we will put random sequence of actions one after the other and see how the prediction evolves
+
+state_list = []
 
 current_sequence_index = np.random.randint(low=0, high=len(HAD3D))
 current_sequence_2D,label_2D = HAD2D[current_sequence_index]
@@ -178,11 +181,15 @@ while cv2.getWindowProperty("Demo from 3D data", 0) >= 0:
         org=(105,25), color=(0,0,0),
         thickness=2)
 
-    t = current_sequence_3D[0].reshape(1,1,75).to(device)
-    output, h_n, c_n = model_LSTM3DF(t, h_n, c_n)
-    h_n, c_n = copy.copy(h_n), copy.copy(c_n)
-    h_n = h_n.to(device)
-    c_n = c_n.to(device)
+    # t = current_sequence_3D[0].reshape(1,1,75).to(device)
+    t = current_sequence_3D[0].reshape(1,75).to(device)
+    state_list.append(t)
+    state_list = state_list[-100:]
+    state = torch.reshape(torch.concat(state_list), (1, len(state_list), 75))
+    h_n, c_n = None, None
+    output, h_n, c_n = model_LSTM3DF(state, h_n, c_n)
+    # output, h_n, c_n = model_LSTM3DF(t, h_n, c_n)
+    h_n, c_n = copy.copy(h_n).to(device), copy.copy(c_n).to(device)
     probs = sm(output).reshape(len(classes)).detach().cpu().numpy()
     for i in range(len(classes)):
         

@@ -105,7 +105,7 @@ def tensor2D23D(tensor2D,tensor3D):
     Y2D = np.array([tensor2D[2*k+1] for k in range(25)]).reshape(-1,1)
     X3D = modelX.predict(X2D).reshape(25)
     Y3D = modelY.predict(Y2D).reshape(25)
-    Z3D = np.array([tensor3D[3*k+2] for k in range(25)]).reshape(25)
+    Z3D = np.array([tensor3D[3*k+2] for k in range(25)]).reshape(25) # depthmap
     return torch.tensor([(float(X3D[k]), float(Y3D[k]), float(Z3D[k])) for k in range(25)]).reshape((1,1,75))
 
 
@@ -250,7 +250,7 @@ while cv2.getWindowProperty("Demo from 3D data", 0) >= 0:
         current_sequence_3D,label_3D = HAD3D[current_sequence_index]
         assert label_2D == label_3D
     
-    c = cv2.waitKey(30)
+    c = cv2.waitKey(50)
     if c == 27:
         break
 

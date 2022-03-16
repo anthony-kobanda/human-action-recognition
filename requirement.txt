@@ -6,6 +6,7 @@ PIL==8.4.0
 seaborn==0.11.2
 session_info==1.0.0
 scikit-learn==1.0.1
+sklearn==1.0.1
 scipy==1.7.2
 torch==1.10.0+cu102
 torchvision==0.11.1+cu102
