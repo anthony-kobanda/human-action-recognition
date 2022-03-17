@@ -1,5 +1,3 @@
-from sklearn.linear_model import LinearRegression
-
 import copy
 import cv2
 import numpy as np
@@ -15,6 +13,8 @@ import torch.nn as nn
 # setting device on GPU if available, else CPU
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print("device: {}".format(device))
+
+mode = 1
 
 
 
@@ -137,7 +137,7 @@ class LSTM03D(nn.Module):
 
 model_LSTM3DF = LSTM03D(nb_classes=len(classes), input_size=75, hidden_size_lstm=256, hidden_size_classifier=128, num_layers=1, device=device)
 model_LSTM3DF.to(device)
-model_LSTM3DF.load_state_dict(torch.load("./models_saved/LSTM3DF_0.pt"))
+model_LSTM3DF.load_state_dict(torch.load("./models_saved/LSTM3DF_{}.pt".format(mode)))
 model_LSTM3DF.eval()
 
 
@@ -156,6 +156,8 @@ current_sequence_index = np.random.randint(low=0, high=len(HAD3D))
 current_sequence_2D,label_2D = HAD2D[current_sequence_index]
 current_sequence_3D,label_3D = HAD3D[current_sequence_index]
 assert label_2D == label_3D
+
+acc0, acc1, curr, delay, found, n, N1, N2 = 0, 0, 1, 0, False, 0, 1, 0
 
 frame_base = np.ones((1080//2,1920//2)) * 125
 
@@ -181,20 +183,86 @@ while cv2.getWindowProperty("Demo from 3D data", 0) >= 0:
         org=(105,25), color=(0,0,0),
         thickness=2)
 
-    # t = current_sequence_3D[0].reshape(1,1,75).to(device)
-    t = current_sequence_3D[0].reshape(1,75).to(device)
-    state_list.append(t)
-    state_list = state_list[-100:]
-    state = torch.reshape(torch.concat(state_list), (1, len(state_list), 75))
-    h_n, c_n = None, None
-    output, h_n, c_n = model_LSTM3DF(state, h_n, c_n)
-    # output, h_n, c_n = model_LSTM3DF(t, h_n, c_n)
+    if mode == 0:
+        t = current_sequence_3D[0].reshape(1,75).to(device)
+        state_list.append(t)
+        state_list = state_list[-100:]
+        state = torch.reshape(torch.concat(state_list), (1, len(state_list), 75))
+        h_n, c_n = None, None
+        output, h_n, c_n = model_LSTM3DF(state, h_n, c_n)
+    else:
+        t = current_sequence_3D[0].reshape(1,1,75).to(device)
+        output, h_n, c_n = model_LSTM3DF(t, h_n, c_n)
     h_n, c_n = copy.copy(h_n).to(device), copy.copy(c_n).to(device)
     probs = sm(output).reshape(len(classes)).detach().cpu().numpy()
+
+    if np.argmax(probs) == label_2D:
+        acc0 += 1
+        if not found:
+            found = True
+            acc1 += 1
+            delay += curr
+            N2 += 1
+    n += 1
+    curr += 1
+
+    v1, v2, v3 = acc0/n, acc1/N1, delay/max(1,N2)
+
+    frame_base = cv2.putText(
+        img=frame_base,
+        text="Acc (abs) :",
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        fontScale = 0.5,
+        org=(10,290), color=(0,0,0),
+        thickness=2)
+    
+    frame_base = cv2.putText(
+        img=frame_base,
+        text="Acc (rel)  :",
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        fontScale = 0.5,
+        org=(10,310), color=(0,0,0),
+        thickness=2)
+    
+    frame_base = cv2.putText(
+        img=frame_base,
+        text="Delay (abs) : ",
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        fontScale = 0.5,
+        org=(10,330), color=(0,0,0),
+        thickness=2)
+
+    frame_base = cv2.putText(
+        img=frame_base,
+        text="{}".format(np.round(100*v1, 2)),
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        fontScale = 0.5,
+        org=(120,290), color=(0,v1,1-v1),
+        thickness=2)
+    
+    frame_base = cv2.putText(
+        img=frame_base,
+        text="{}".format(np.round(100*v2, 2)),
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        fontScale = 0.5,
+        org=(120,310), color=(0,v2,1-v2),
+        thickness=2)
+    
+    frame_base = cv2.putText(
+        img=frame_base,
+        text="{}".format(np.round(v3, 2)),
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        fontScale = 0.5,
+        org=(120,330), color=(0,1-v3/200,v3/200),
+        thickness=2)
+
     for i in range(len(classes)):
         
         p = float(probs[i].round(2))
-        frame_base = cv2.rectangle(img=frame_base, pt1=(5,38+i*25), pt2=(int(5+p*245),63+i*25), color=(0,p,1-p), thickness=-1)
+        color = (0,0,255)
+        if i == label_2D:
+            color = (0,255,0)
+        frame_base = cv2.rectangle(img=frame_base, pt1=(5,38+i*25), pt2=(int(5+p*245),63+i*25), color=color, thickness=-1)
         frame_base = cv2.rectangle(img=frame_base, pt1=(5,38+i*25), pt2=(250,63+i*25), color=(0,0,0), thickness=2)
 
         frame_base = cv2.putText(
@@ -227,8 +295,8 @@ while cv2.getWindowProperty("Demo from 3D data", 0) >= 0:
                     xb = int(np.clip(xb, 1, 1920)//2-1)
                     yb = int(np.clip(yb, 1, 1080)//2-1)
                     frame_base = cv2.line(img=frame_base, pt1=(xa,ya), pt2=(xb,yb), color=(255,0,0), thickness=3)
-                    if body_part[j] == 3:
-                        frame_base = cv2.circle(img=frame_base, center=(xa,ya), radius=50, color=(0,0,1), thickness=-1)
+                    if body_part[j+1] == 3:
+                        frame_base = cv2.circle(img=frame_base, center=(xb,yb), radius=15, color=(255,0,0), thickness=-1)
 
     cv2.imshow("Demo from 3D data", frame_base)
 
@@ -240,6 +308,9 @@ while cv2.getWindowProperty("Demo from 3D data", 0) >= 0:
         current_sequence_index = np.random.randint(low=0, high=len(HAD3D))
         current_sequence_2D,label_2D = HAD2D[current_sequence_index]
         current_sequence_3D,label_3D = HAD3D[current_sequence_index]
+        found = False
+        curr = 1
+        N1 += 1
         assert label_2D == label_3D
     
     c = cv2.waitKey(30)
