@@ -154,8 +154,8 @@ The content of a given file in the *NTU RGB+D skeletons dataset* is described he
         
         * Coordinates on the color image (we don't have it but it has a resolution of $1920 \times 1080$) in pixels:
             
-            * (float) colorX
-            * (float) colorY
+            * (float) colorX $\in[0,1919]$
+            * (float) colorY $\in[0,1079]$
 
         * Orientation coordinates of the joint orientation:
             
@@ -198,15 +198,15 @@ The following dataframe summarises the distribution of the number of frames acco
 |-------------------|-------------------|-------------------------------|-------------------------------|-------------------------------|-----------------------------------|-------------------------------|
 | **Action Class**  | **Nb of Samples** | **Nb of Frames** (***Mean***) | **Nb of Frames** (***Std***)  | **Nb of Frames** (***Min***)  | **Nb of Frames** (***Median***)   | **Nb of Frames** (***Max***)  |
 |                   |                   |                               |                               |                               |                                   |                               |
-| 0                 | 943               | 81                            | 13.54                         | 54                            | 81                                | 131                           |
-| 1                 | 944               | 64                            | 12.51                         | 37                            | 62                                | 136                           |
-| 2                 | 941               | 74                            | 13.97                         | 46                            | 74                                | 119                           |
-| 3                 | 936               | 64                            | 11.72                         | 39                            | 63                                | 120                           |
-| 4                 | 945               | 141                           | 33.88                         | 66                            | 138                               | 277                           |
-| 5                 | 946               | 97                            | 23.20                         | 54                            | 94                                | 202                           |
-| 6                 | 944               | 56                            | 11.57                         | 32                            | 54                                | 110                           |
-| 7                 | 946               | 64                            | 14.16                         | 36                            | 62                                | 128                           |
-| 8                 | 946               | 64                            | 12.44                         | 40                            | 62                                | 139                           |
+| 0                 | 943               | 81                            | 14                            | 54                            | 81                                | 131                           |
+| 1                 | 944               | 64                            | 13                            | 37                            | 62                                | 136                           |
+| 2                 | 941               | 74                            | 14                            | 46                            | 74                                | 119                           |
+| 3                 | 936               | 64                            | 12                            | 39                            | 63                                | 120                           |
+| 4                 | 945               | 141                           | 34                            | 66                            | 138                               | 277                           |
+| 5                 | 946               | 97                            | 23                            | 54                            | 94                                | 202                           |
+| 6                 | 944               | 56                            | 12                            | 32                            | 54                                | 110                           |
+| 7                 | 946               | 64                            | 14                            | 36                            | 62                                | 128                           |
+| 8                 | 946               | 64                            | 12                            | 40                            | 62                                | 139                           |
 |                   |                   |                               |                               |                               |                                   |                               |
 
 Here are a few remarks from those different values:
